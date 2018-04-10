@@ -107,7 +107,39 @@ class CArray {
             return getElement(index);
         }
 
+        void sort() {
+            quicksort(0, (int)(arr_size - 1));
+        }
+
     protected:
+        void quicksort(int left, int right) {
+            int i = left;
+            int j = right;
+            const TData& mid = array[ (i + j) / 2 ];
+            while (i <= j) {
+                while (array[i] < mid) {
+                    i++;
+                }
+                while (array[j] > mid) {
+                    j--;
+                }
+                if (i <= j) {
+                    const TData tmp = array[j];
+                    array[j] = array[i];
+                    array[i] = tmp;
+
+                    i++;
+                    j--;
+                }
+            }
+            if (left < j) {
+                quicksort(left, j);
+            }
+            if (right > i) {
+                quicksort(i, right);
+            }
+        }
+
         void realloc() {
             capacity = (capacity == 0) ? (1u) : (capacity * 2);
 
@@ -132,6 +164,28 @@ class CArray {
         unsigned int arr_size;
         unsigned int capacity;
 };
+
+MATCHER(isSorted, "") {
+    for (unsigned int i = 0; i < arg.size() - 1; i++) {
+        if (arg[i] > arg[i + 1]) {
+            return false;
+        }
+    }
+    return true;
+}
+
+TEST(Sort, RearrangesArrayElementsInIncreasingOrder) {
+    CArray<int> array;
+    array.push_back(3);
+    array.push_back(4);
+    array.push_back(0);
+    array.push_back(1);
+    array.push_back(4);
+
+    array.sort();
+
+    ASSERT_THAT(array, isSorted());
+}
 
 MATCHER_P(isEqualToArray, target, "") {
     if (target.size() != arg.size()) {
