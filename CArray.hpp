@@ -135,7 +135,7 @@ template <typename TData>
 void arr::CArray<TData>::quicksort(int left, int right) {
     int i = left;
     int j = right;
-    const TData& mid = array[ (i + j) / 2 ];
+    const TData mid = array[ (i + j) / 2 ];
     while (i <= j) {
         while (array[i] < mid) {
             i++;
