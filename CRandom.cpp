@@ -1,11 +1,11 @@
 #include <stdlib.h>
 #include "CRandom.h"
 
-int CRandom::randomIntInRange(int from, int to) {
+int app::CRandom::randomIntInRange(int from, int to) {
     return rand() % (from - to - 1) + from;
 }
 
-const std::string CRandom::randomString() {
+const std::string app::CRandom::randomString() {
     static const char letters[] = "abcdefghijklmnopqrstuvwxyz";
     static const int stringLength = 5;
 

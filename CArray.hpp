@@ -7,14 +7,14 @@
 #include "CArrayException.h"
 
 template <typename TData>
-CArray<TData>::CArray()
+arr::CArray<TData>::CArray()
     : array(0)
     , arr_size(0u)
     , capacity(0u) {
 }
 
 template <typename TData>
-CArray<TData>::CArray(const CArray& rhs)
+arr::CArray<TData>::CArray(const CArray& rhs)
     : array(0)
     , arr_size(rhs.arr_size)
     , capacity(rhs.capacity) {
@@ -23,7 +23,7 @@ CArray<TData>::CArray(const CArray& rhs)
 }
 
 template <typename TData>
-CArray<TData>::~CArray() {
+arr::CArray<TData>::~CArray() {
     if (array) {
         delete[] array;
         array = 0;
@@ -31,7 +31,7 @@ CArray<TData>::~CArray() {
 }
 
 template <typename TData>
-CArray<TData>& CArray<TData>::operator=(const CArray& rhs) {
+arr::CArray<TData>& arr::CArray<TData>::operator=(const CArray& rhs) {
     if (this != &rhs) {
         TData* source = array;
         array = new TData[rhs.capacity];
@@ -45,7 +45,7 @@ CArray<TData>& CArray<TData>::operator=(const CArray& rhs) {
 }
 
 template <typename TData>
-void CArray<TData>::print() const {
+void arr::CArray<TData>::print() const {
     std::cout << "Elements: |";
     for (unsigned int i = 0; i < arr_size; i++) {
         std::cout << array[i] << "|";
@@ -54,7 +54,7 @@ void CArray<TData>::print() const {
 }
 
 template <typename TData>
-void CArray<TData>::erase(unsigned int index) {
+void arr::CArray<TData>::erase(unsigned int index) {
     if (index > arr_size) {
         throw CArrayException("Attempt to erase out of range element");
     }
@@ -66,7 +66,7 @@ void CArray<TData>::erase(unsigned int index) {
 }
 
 template <typename TData>
-void CArray<TData>::insert(unsigned int index, const TData& value) {
+void arr::CArray<TData>::insert(unsigned int index, const TData& value) {
     if (index > arr_size) {
         throw CArrayException("Attempt to insert element out of range array");
     }
@@ -84,7 +84,7 @@ void CArray<TData>::insert(unsigned int index, const TData& value) {
 }
 
 template <typename TData>
-void CArray<TData>::push_back(const TData& value_) {
+void arr::CArray<TData>::push_back(const TData& value_) {
     if (arr_size == capacity) {
         realloc();
     }
@@ -93,19 +93,19 @@ void CArray<TData>::push_back(const TData& value_) {
 }
 
 template <typename TData>
-void CArray<TData>::clear() {
+void arr::CArray<TData>::clear() {
     arr_size = 0u;
     delete[] array;
     array = 0;
 }
 
 template <typename TData>
-void CArray<TData>::sort() {
+void arr::CArray<TData>::sort() {
     quicksort(0, (int)(arr_size - 1));
 }
 
 template <typename TData>
-void CArray<TData>::eraseIf(const AbstractPredicate<TData>& predicate) {
+void arr::CArray<TData>::eraseIf(const AbstractPredicate<TData>& predicate) {
     unsigned int i = 0;
     while (i < arr_size) {
         if (predicate(array, i)) {
@@ -117,22 +117,22 @@ void CArray<TData>::eraseIf(const AbstractPredicate<TData>& predicate) {
 }
 
 template <typename TData>
-unsigned int CArray<TData>::size() const {
+unsigned int arr::CArray<TData>::size() const {
     return arr_size;
 }
 
 template <typename TData>
-const TData& CArray<TData>::operator[] (unsigned int index) const {
+const TData& arr::CArray<TData>::operator[] (unsigned int index) const {
     return getElement(index);
 }
 
 template <typename TData>
-TData& CArray<TData>::operator[] (unsigned int index) {
+TData& arr::CArray<TData>::operator[] (unsigned int index) {
     return getElement(index);
 }
 
 template <typename TData>
-void CArray<TData>::quicksort(int left, int right) {
+void arr::CArray<TData>::quicksort(int left, int right) {
     int i = left;
     int j = right;
     const TData& mid = array[ (i + j) / 2 ];
@@ -161,7 +161,7 @@ void CArray<TData>::quicksort(int left, int right) {
 }
 
 template <typename TData>
-void CArray<TData>::realloc() {
+void arr::CArray<TData>::realloc() {
     capacity = (capacity == 0) ? (1u) : (capacity * 2);
 
     TData* buff = new TData[capacity];
@@ -174,7 +174,7 @@ void CArray<TData>::realloc() {
 }
 
 template <typename TData>
-TData& CArray<TData>::getElement(unsigned int index) const {
+TData& arr::CArray<TData>::getElement(unsigned int index) const {
     if (arr_size == 0 || index > arr_size - 1) {
         throw CArrayException("Attempt to access on out of range index");
     }

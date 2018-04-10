@@ -7,14 +7,14 @@
 using namespace testing;
 
 template<typename T>
-struct All : AbstractPredicate<T> {
+struct All : arr::AbstractPredicate<T> {
     bool operator() (const T* const array, unsigned int index) const {
         return true;
     }
 };
 
 TEST(EraseIf, DeletesElementIfPredicateConditionAccomplished) {
-    CArray<int> array;
+    arr::CArray<int> array;
     array.push_back(0);
     array.push_back(1);
     array.push_back(2);
@@ -35,7 +35,7 @@ MATCHER(isSorted, "") {
 }
 
 TEST(Sort, RearrangesArrayElementsInIncreasingOrder) {
-    CArray<int> array;
+    arr::CArray<int> array;
     array.push_back(3);
     array.push_back(4);
     array.push_back(0);
@@ -60,21 +60,21 @@ MATCHER_P(isEqualToArray, target, "") {
 }
 
 TEST(CopyConstructor, MakesArrayCopy) {
-    CArray<int> array;
+    arr::CArray<int> array;
     array.push_back(0);
     array.push_back(1);
 
-    CArray<int> copy(array);
+    arr::CArray<int> copy(array);
 
     ASSERT_THAT(copy, isEqualToArray(array));
 }
 
 TEST(AssignmentOperator, MakesArrayCopy) {
-    CArray<int> array1;
+    arr::CArray<int> array1;
     array1.push_back(0);
     array1.push_back(1);
 
-    CArray<int> array2;
+    arr::CArray<int> array2;
     array2.push_back(2);
     array2.push_back(3);
     array2.push_back(4);
@@ -84,7 +84,7 @@ TEST(AssignmentOperator, MakesArrayCopy) {
     ASSERT_THAT(array2, isEqualToArray(array1));
 }
 
-TEST(Erase, DecreasesArraySize) {    CArray<int> array;
+TEST(Erase, DecreasesArraySize) {    arr::CArray<int> array;
     array.push_back(0);
 
     array.erase(0);
@@ -93,13 +93,13 @@ TEST(Erase, DecreasesArraySize) {    CArray<int> array;
 }
 
 TEST(Erase, ThrowsOnErasingOutOfRangeIndex) {
-    CArray<int> array;
+    arr::CArray<int> array;
 
-    ASSERT_THROW(array.erase(1), CArrayException);
+    ASSERT_THROW(array.erase(1), arr::CArrayException);
 }
 
 TEST(Erase, DeletesElementAtRequiredIndexPosition) {
-    CArray<int> array;
+    arr::CArray<int> array;
     array.push_back(1);
     array.push_back(2);
 
@@ -109,7 +109,7 @@ TEST(Erase, DeletesElementAtRequiredIndexPosition) {
 }
 
 TEST(Erase, ShiftsArrayElementsToLeftAfterDeletedElement) {
-    CArray<int> array;
+    arr::CArray<int> array;
     array.push_back(0);
     array.push_back(1);
     array.push_back(2);
@@ -122,7 +122,7 @@ TEST(Erase, ShiftsArrayElementsToLeftAfterDeletedElement) {
 }
 
 TEST(Insert, IncreasesArraySize) {
-    CArray<int> array;
+    arr::CArray<int> array;
 
     array.insert(0, 100);
 
@@ -130,13 +130,13 @@ TEST(Insert, IncreasesArraySize) {
 }
 
 TEST(Insert, ThrowsOnInsertingOutOfRangeIndex) {
-    CArray<int> array;
+    arr::CArray<int> array;
 
-    ASSERT_THROW(array.insert(1, 100), CArrayException);
+    ASSERT_THROW(array.insert(1, 100), arr::CArrayException);
 }
 
 TEST(Insert, AddsElementAtRequiredIndexPosition) {
-    CArray<int> array;
+    arr::CArray<int> array;
 
     array.insert(0, 100);
 
@@ -144,7 +144,7 @@ TEST(Insert, AddsElementAtRequiredIndexPosition) {
 }
 
 TEST(Insert, ShiftsArrayElementsToRightAfterInsertedElement) {
-    CArray<int> array;
+    arr::CArray<int> array;
     array.push_back(0);
     array.push_back(1);
     array.push_back(2);
@@ -156,14 +156,14 @@ TEST(Insert, ShiftsArrayElementsToRightAfterInsertedElement) {
 }
 
 TEST(AccessOperator, ThrowsOnAccessingOutOfRangeIndex) {
-    CArray<int> array;
+    arr::CArray<int> array;
     array.push_back(0);
 
-    ASSERT_THROW(array[1], CArrayException);
+    ASSERT_THROW(array[1], arr::CArrayException);
 }
 
 TEST(AccessOperator, ReturnsArrayElementByIndex) {
-    CArray<int> array;
+    arr::CArray<int> array;
 
     array.push_back(0);
     array.push_back(1);
@@ -173,19 +173,19 @@ TEST(AccessOperator, ReturnsArrayElementByIndex) {
 }
 
 TEST(AccessOperator, ThrowsOnAccessingEmptyArray) {
-    CArray<int> array;
+    arr::CArray<int> array;
 
-    ASSERT_THROW(array[0], CArrayException);
+    ASSERT_THROW(array[0], arr::CArrayException);
 }
 
 TEST(Array, IsEmptyWhenCreated) {
-    CArray<int> array;
+    arr::CArray<int> array;
 
     ASSERT_THAT(array.size(), Eq(0u));
 }
 
 TEST(Array, IsNonEmptyWhenElementAdded) {
-    CArray<int> array;
+    arr::CArray<int> array;
 
     array.push_back(0);
 
@@ -193,7 +193,7 @@ TEST(Array, IsNonEmptyWhenElementAdded) {
 }
 
 TEST(PushBack, InsertsElementAtArrayEnd) {
-    CArray<int> array;
+    arr::CArray<int> array;
 
     array.push_back(100);
 
@@ -201,7 +201,7 @@ TEST(PushBack, InsertsElementAtArrayEnd) {
 }
 
 TEST(Clear, MakesArrayEmpty) {
-    CArray<int> array;
+    arr::CArray<int> array;
     array.push_back(0);
 
     array.clear();

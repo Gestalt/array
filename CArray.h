@@ -1,6 +1,8 @@
 #ifndef CArrayH
 #define CArrayH
 
+namespace arr {
+
 template<typename TData>
 struct AbstractPredicate {
     virtual ~AbstractPredicate() {}
@@ -35,6 +37,8 @@ class CArray {
         unsigned int arr_size;
         unsigned int capacity;
 };
+
+}
 
 #include "CArray.hpp"
 
