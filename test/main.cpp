@@ -2,6 +2,7 @@
 #include <exception>
 #include <stdio.h>
 #include <vector>
+#include <stdlib.h>
 
 #include <gmock/gmock.h>
 
@@ -189,6 +190,36 @@ struct All : AbstractPredicate<T> {
         return true;
     }
 };
+
+class RandomGenerator {
+    public:
+    static int randomIntegerInRange(int from, int to) {
+        return rand() % (from - to - 1) + from;
+    }
+
+    static const std::string randomString() {
+        static const char letters[] = "abcdefghijklmnopqrstuvwxyz";
+        static const int stringLength = 5;
+
+        std::string res;
+        for (int i = 0; i < stringLength; i++) {
+            res += std::string(1, letters[RandomGenerator::randomIntegerInRange(0, strlen(letters)-1)]);
+        }
+        return res;
+    }
+};
+
+TEST(Random, DoRandom) {
+    //srand (time(NULL));
+
+    for (int i = 0; i < 20; i++) {
+        std::cout
+            << RandomGenerator::randomIntegerInRange(1, 100)
+            << RandomGenerator::randomString() << std::endl;
+    }
+
+    ASSERT_TRUE(true);
+}
 
 TEST(EraseIf, DeletesElementIfPredicateConditionAccomplished) {
     CArray<int> array;
