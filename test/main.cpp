@@ -1,188 +1,10 @@
-#include <iostream>
-#include <exception>
-#include <stdio.h>
-#include <vector>
-#include <stdlib.h>
-
 #include <gmock/gmock.h>
 
-using namespace std;
+#include "CArray.h"
+#include "CRandom.h"
+#include "CArrayException.h"
+
 using namespace testing;
-
-template<typename T>
-struct AbstractPredicate {
-    virtual ~AbstractPredicate() {}
-	virtual bool operator()(const T* const, unsigned int) const = 0;
-};
-
-template <typename TData>
-class CArray {
-    public:
-        CArray()
-            : array(0)
-            , arr_size(0u)
-            , capacity(0u) {
-        }
-
-        CArray(const CArray& rhs)
-            : array(0)
-            , arr_size(rhs.arr_size)
-            , capacity(rhs.capacity) {
-                array = new TData[rhs.capacity];
-                memcpy(&array[0], &rhs.array[0], rhs.arr_size * sizeof(TData));
-        }
-
-        ~CArray() {
-            if (array) {
-                delete[] array;
-                array = 0;
-            }
-        }
-
-        CArray& operator=(const CArray& rhs) {
-            if (this != &rhs) {
-                TData* source = array;
-                array = new TData[rhs.capacity];
-                memcpy(&array[0], &rhs.array[0], rhs.arr_size * sizeof(TData));
-                delete source;
-
-                arr_size = rhs.arr_size;
-                capacity = rhs.capacity;
-            }
-            return *this;
-        }
-
-        void print() const {
-            std::cout << "Elements: |";
-            for (unsigned int i = 0; i < arr_size; i++) {
-                std::cout << array[i] << "|";
-            }
-            std::cout << std::endl;
-        }
-
-        void erase(unsigned int index) {
-            if (index > arr_size) {
-                throw std::exception();
-            }
-
-            for (unsigned int i = index; i < arr_size; i++) {
-                array[i] = array[i + 1];
-            }
-            arr_size--;
-        }
-
-        void insert(unsigned int index, const TData& value) {
-            if (index > arr_size) {
-                throw std::exception();
-            }
-
-            if (capacity == arr_size) {
-                realloc();
-            }
-
-            for (unsigned int i = arr_size; i > index; i--) {
-                array[i] = array[i - 1];
-            }
-
-            array[index] = value;
-            arr_size++;
-        }
-
-        void push_back(const TData& value_) {
-            if (arr_size == capacity) {
-                realloc();
-            }
-            array[arr_size] = value_;
-            arr_size++;
-        }
-
-        unsigned int size() const {
-            return arr_size;
-        }
-
-        void clear() {
-            arr_size = 0u;
-            delete[] array;
-            array = 0;
-        }
-
-        const TData& operator[] (unsigned int index) const {
-            return getElement(index);
-        }
-
-        TData& operator[] (unsigned int index) {
-            return getElement(index);
-        }
-
-        void sort() {
-            quicksort(0, (int)(arr_size - 1));
-        }
-
-        void eraseIf(const AbstractPredicate<TData>& predicate) {
-            unsigned int i = 0;
-            while (i < arr_size) {
-                if (predicate(array, i)) {
-                    erase(i);
-                } else {
-                    i++;
-                }
-            }
-        }
-
-    protected:
-        void quicksort(int left, int right) {
-            int i = left;
-            int j = right;
-            const TData& mid = array[ (i + j) / 2 ];
-            while (i <= j) {
-                while (array[i] < mid) {
-                    i++;
-                }
-                while (array[j] > mid) {
-                    j--;
-                }
-                if (i <= j) {
-                    const TData tmp = array[j];
-                    array[j] = array[i];
-                    array[i] = tmp;
-
-                    i++;
-                    j--;
-                }
-            }
-            if (left < j) {
-                quicksort(left, j);
-            }
-            if (right > i) {
-                quicksort(i, right);
-            }
-        }
-
-        void realloc() {
-            capacity = (capacity == 0) ? (1u) : (capacity * 2);
-
-            TData* buff = new TData[capacity];
-
-            if (array) {
-                memcpy(&buff[0], &array[0], size() * sizeof(TData));
-                delete[] array;
-            }
-            array = buff;
-        }
-
-        TData& getElement(unsigned int index) const {
-            if (arr_size == 0 || index > arr_size - 1) {
-                throw std::exception();
-            }
-
-            return array[index];
-        }
-    protected:
-        TData* array;
-        unsigned int arr_size;
-        unsigned int capacity;
-};
-
 
 template<typename T>
 struct All : AbstractPredicate<T> {
@@ -190,36 +12,6 @@ struct All : AbstractPredicate<T> {
         return true;
     }
 };
-
-class RandomGenerator {
-    public:
-    static int randomIntegerInRange(int from, int to) {
-        return rand() % (from - to - 1) + from;
-    }
-
-    static const std::string randomString() {
-        static const char letters[] = "abcdefghijklmnopqrstuvwxyz";
-        static const int stringLength = 5;
-
-        std::string res;
-        for (int i = 0; i < stringLength; i++) {
-            res += std::string(1, letters[RandomGenerator::randomIntegerInRange(0, strlen(letters)-1)]);
-        }
-        return res;
-    }
-};
-
-TEST(Random, DoRandom) {
-    //srand (time(NULL));
-
-    for (int i = 0; i < 20; i++) {
-        std::cout
-            << RandomGenerator::randomIntegerInRange(1, 100)
-            << RandomGenerator::randomString() << std::endl;
-    }
-
-    ASSERT_TRUE(true);
-}
 
 TEST(EraseIf, DeletesElementIfPredicateConditionAccomplished) {
     CArray<int> array;
@@ -303,7 +95,7 @@ TEST(Erase, DecreasesArraySize) {    CArray<int> array;
 TEST(Erase, ThrowsOnErasingOutOfRangeIndex) {
     CArray<int> array;
 
-    ASSERT_THROW(array.erase(1), std::exception);
+    ASSERT_THROW(array.erase(1), CArrayException);
 }
 
 TEST(Erase, DeletesElementAtRequiredIndexPosition) {
@@ -340,7 +132,7 @@ TEST(Insert, IncreasesArraySize) {
 TEST(Insert, ThrowsOnInsertingOutOfRangeIndex) {
     CArray<int> array;
 
-    ASSERT_THROW(array.insert(1, 100), std::exception);
+    ASSERT_THROW(array.insert(1, 100), CArrayException);
 }
 
 TEST(Insert, AddsElementAtRequiredIndexPosition) {
@@ -367,7 +159,7 @@ TEST(AccessOperator, ThrowsOnAccessingOutOfRangeIndex) {
     CArray<int> array;
     array.push_back(0);
 
-    ASSERT_THROW(array[1], std::exception);
+    ASSERT_THROW(array[1], CArrayException);
 }
 
 TEST(AccessOperator, ReturnsArrayElementByIndex) {
@@ -383,7 +175,7 @@ TEST(AccessOperator, ReturnsArrayElementByIndex) {
 TEST(AccessOperator, ThrowsOnAccessingEmptyArray) {
     CArray<int> array;
 
-    ASSERT_THROW(array[0], std::exception);
+    ASSERT_THROW(array[0], CArrayException);
 }
 
 TEST(Array, IsEmptyWhenCreated) {
@@ -407,7 +199,6 @@ TEST(PushBack, InsertsElementAtArrayEnd) {
 
     ASSERT_THAT(array[0], Eq(100));
 }
-
 
 TEST(Clear, MakesArrayEmpty) {
     CArray<int> array;

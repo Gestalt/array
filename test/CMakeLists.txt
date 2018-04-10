@@ -12,7 +12,8 @@ enable_testing()
 
 add_executable(${PROJECT_NAME}
 	main.cpp
-	#${CMAKE_CURRENT_SOURCE_DIR}/../*.cpp
+	${CMAKE_CURRENT_SOURCE_DIR}/../CRandom.cpp
+	${CMAKE_CURRENT_SOURCE_DIR}/../CArrayException.cpp
 )
 
 if(USE_BOOST)
