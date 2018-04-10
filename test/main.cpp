@@ -8,6 +8,12 @@
 using namespace std;
 using namespace testing;
 
+template<typename T>
+struct AbstractPredicate {
+    virtual ~AbstractPredicate() {}
+	virtual bool operator()(const T* const, unsigned int) const = 0;
+};
+
 template <typename TData>
 class CArray {
     public:
@@ -111,6 +117,17 @@ class CArray {
             quicksort(0, (int)(arr_size - 1));
         }
 
+        void eraseIf(const AbstractPredicate<TData>& predicate) {
+            unsigned int i = 0;
+            while (i < arr_size) {
+                if (predicate(array, i)) {
+                    erase(i);
+                } else {
+                    i++;
+                }
+            }
+        }
+
     protected:
         void quicksort(int left, int right) {
             int i = left;
@@ -164,6 +181,26 @@ class CArray {
         unsigned int arr_size;
         unsigned int capacity;
 };
+
+
+template<typename T>
+struct All : AbstractPredicate<T> {
+    bool operator() (const T* const array, unsigned int index) const {
+        return true;
+    }
+};
+
+TEST(EraseIf, DeletesElementIfPredicateConditionAccomplished) {
+    CArray<int> array;
+    array.push_back(0);
+    array.push_back(1);
+    array.push_back(2);
+
+    All<int> allPredicate;
+    array.eraseIf(allPredicate);
+
+    ASSERT_THAT(array.size(), Eq(0));
+}
 
 MATCHER(isSorted, "") {
     for (unsigned int i = 0; i < arg.size() - 1; i++) {
