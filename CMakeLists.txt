@@ -7,6 +7,7 @@ add_executable(${PROJECT_NAME}
 	main.cpp
 	CRandom.cpp
 	CArrayException.cpp
+	CApplication.cpp
 )
 
 if(USE_BOOST)
