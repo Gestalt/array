@@ -2,6 +2,14 @@
 *.local
 *.res
 *.dsk
+*.vcproj
+*.suo
+*.sln
+*.ncb
+*.user
 /Win32
 /build
 /bin
+/debug
+/release
+/*.dir
