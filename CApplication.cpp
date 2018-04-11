@@ -6,8 +6,8 @@ struct ContainsLetter : arr::AbstractPredicate<std::string> {
     ContainsLetter(const char* const letters_)
         : letters(letters_) {
         }
-    bool operator() (const std::string* const array, unsigned int index) const {
-        const char* str = array[index].c_str();
+    bool operator() (const std::string& value) const {
+        const char* str = value.c_str();
         const size_t size = strlen(str);
         const size_t size_l = strlen(letters);
 

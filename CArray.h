@@ -6,7 +6,7 @@ namespace arr {
 template<typename TData>
 struct AbstractPredicate {
     virtual ~AbstractPredicate() {}
-	virtual bool operator()(const TData* const, unsigned int) const = 0;
+	virtual bool operator()(const TData&) const = 0;
 };
 
 template <typename TData>

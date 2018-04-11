@@ -108,7 +108,7 @@ template <typename TData>
 void arr::CArray<TData>::eraseIf(const AbstractPredicate<TData>& predicate) {
     unsigned int i = 0;
     while (i < arr_size) {
-        if (predicate(array, i)) {
+        if (predicate(array[i])) {
             erase(i);
         } else {
             i++;

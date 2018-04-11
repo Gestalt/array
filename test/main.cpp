@@ -8,7 +8,7 @@ using namespace testing;
 
 template<typename T>
 struct All : arr::AbstractPredicate<T> {
-    bool operator() (const T* const array, unsigned int index) const {
+    bool operator() (const T&) const {
         return true;
     }
 };
