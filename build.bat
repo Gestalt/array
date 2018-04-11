@@ -4,7 +4,7 @@ mkdir build
 
 cd build
 
-cmake -G "Borland Makefiles" -DUSE_BOOST:BOOL=ON ../ || exit /b
-make || exit /b
+cmake -G "Visual Studio 8 2005" ../  || exit /b
+cmake --build . --config Release || exit /b
 
-array
+release\array
