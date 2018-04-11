@@ -110,7 +110,11 @@ TEST(
   ASSERT_THAT(array2, isEqualToArray(array1));
 }
 
-TEST(    Erase, DecreasesArraySize  ){  arr::CArray<int> array;
+TEST(
+    Erase, DecreasesArraySize
+  )
+{
+  arr::CArray<int> array;
   array.push_back(0);
 
   array.erase(0);
