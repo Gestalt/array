@@ -1,13 +1,16 @@
 #ifndef CApplicationH
 #define CApplicationH
 
-namespace app {
+namespace app
+{
 
-class CApplication {
-    public:
-        static int process();
+class CApplication
+{
+  public:
+    static int process();
 };
 
 }
 
 #endif
+

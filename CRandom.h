@@ -3,14 +3,21 @@
 
 #include <string>
 
-namespace app {
+namespace app
+{
 
-class CRandom {
-    public:
-    static int randomIntInRange(int from, int to);
+class CRandom
+{
+  public:
+
+    static int randomIntInRange(
+        int _from, int _to
+      );
+
     static const std::string randomString();
 };
 
 }
 
 #endif
+

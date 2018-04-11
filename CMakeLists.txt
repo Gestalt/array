@@ -5,6 +5,7 @@ option(USE_BOOST "Using <boost> to access c++11 features" OFF)
 
 add_executable(${PROJECT_NAME}
 	main.cpp
+	stdafx.cpp
 	CRandom.cpp
 	CArrayException.cpp
 	CApplication.cpp
