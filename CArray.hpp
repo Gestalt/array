@@ -65,14 +65,13 @@ void arr::CArray<TData>::erase(
     unsigned int _index
   )
 {
-  if (_index > arr_size)
+  if (_index >= arr_size)
   {
     throw CArrayException("Attempt to erase out of range element");
   }
-
-  for (unsigned int i = _index; i < arr_size; i++)
+  if (_index < arr_size - 1)
   {
-    array[i] = array[i + 1];
+    memcpy(&array[_index], &array[_index + 1], (arr_size - 1 - _index) * sizeof(TData));
   }
   arr_size--;
 }
@@ -92,10 +91,7 @@ void arr::CArray<TData>::insert(
     realloc();
   }
 
-  for (unsigned int i = arr_size; i > _index; i--)
-  {
-    array[i] = array[i - 1];
-  }
+  memcpy(&array[_index + 1], &array[_index], (arr_size - _index) * sizeof(TData));
 
   array[_index] = _value;
   arr_size++;
